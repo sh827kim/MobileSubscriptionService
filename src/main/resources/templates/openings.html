@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+<div layout:fragment="content">
+    <div class="container-fluid">
+        <h1 class="h3 mb-2 text-gray-800">청약 내역</h1>
+
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-secondary" style="width: 50%; float: left">청약 내역 조회</h6>
+                <button class="btn btn-dark" type="button" style="float: right" data-toggle="modal" data-target="#registerModal">
+                    신규 청약 등록
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" >
+                        <thead>
+                        <tr>
+                            <th>Activation ID</th>
+                            <th>Device Type</th>
+                            <th>Phone No</th>
+                            <th>Activated</th>
+                            <th>Req date</th>
+                            <th>Activated date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>WE000001</td>
+                            <td>Wearable</td>
+                            <td>010-12**-****</td>
+                            <td>Y</td>
+                            <td>21.09.25 13:11:02</td>
+                            <td>21.09.25 14:00:00</td>
+                        </tr>
+                        <tr>
+                            <td>TA000001</td>
+                            <td>Tablet</td>
+                            <td>010-12**-****</td>
+                            <td>Y</td>
+                            <td>21.09.25 13:11:02</td>
+                            <td>21.09.25 14:00:00</td>
+                        </tr>
+                        <tr>
+                            <td>MB000001</td>
+                            <td>Mobile</td>
+                            <td>010-12**-****</td>
+                            <td>Y</td>
+                            <td>21.09.25 13:11:02</td>
+                            <td>21.09.25 14:00:00</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:fragment="modal(id)" class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">청약 등록</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group" style="margin-bottom: 7px">
+                        <label for="customerName" style="margin-right: 5px"> 고객 성함 : </label>
+                        <input type="text" id="customerName" class="form-control form-control-sm" placeholder="검색버튼을 누르세요.">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button" style="padding: 0.175rem 0.55rem;">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 7px">
+                        <label for="phoneNo" style="margin-right: 5px"> 개통 번호 : </label>
+                        <input type="text" id="phoneNo" class="form-control form-control-sm" placeholder="010-0000-0000">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 7px">
+                        <label for="deviceType" style="margin-right: 5px"> 기기 타입 : </label>
+                        <select id="deviceType"  class="dropdown-menu2" >
+                            <option class="dropdown-item" value="Mobile" >Mobile</option>
+                            <option class="dropdown-item" value="Tablet">Tablet</option>
+                            <option class="dropdown-item" value="Wearable">Wearable</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                    <a class="btn btn-primary" onclick="openRegister()" data-dismiss="modal">등록</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page level custom scripts -->
+<th:block layout:fragment="script">
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        });
+        function openRegister() {
+            let customerName = $("#customerName").val();
+            let phoneNo = $("#phoneNo").val();
+            let deviceType = $("#deviceType").val();
+            console.log(customerName + phoneNo + deviceType);
+            $("#customerName").val("");
+            $("#phoneNo").val("");
+        }
+    </script>
+</th:block>
+</body>
+
+</html>

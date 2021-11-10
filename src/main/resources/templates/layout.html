@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- 공통 헤드-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <!--   <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>-->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+    <link th:href="@{/bootstrap/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/bootstrap/css/sb-admin-2.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/bootstrap/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css"  />
+</head>
+<body id="page-top">
+<div id="wrapper">
+    <div block th:replace="/fragments/sidebar :: sidebarFragment"></div>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <!-- 상단바-->
+            <header  th:replace="/fragments/top :: topbarFragment"></header>
+
+            <!-- 본문-->
+            <div layout:fragment="content"></div>
+        </div>
+
+        <!-- 공통 하단-->
+        <footer th:replace="/fragments/footer :: footerFragment"></footer>
+    </div>
+</div>
+
+<!-- 공통 스크립트-->
+    <!-- Bootstrap core JavaScript-->
+<script th:src="@{/bootstrap/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- Core plugin JavaScript-->
+<script th:src="@{/bootstrap/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+<!-- Custom scripts for all pages-->
+<script th:src="@{/bootstrap/js/sb-admin-2.min.js}"></script>
+<script th:src="@{/bootstrap/vendor/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+
+<th:block layout:fragment="script">
+
+</th:block>
+</body>
+</html>

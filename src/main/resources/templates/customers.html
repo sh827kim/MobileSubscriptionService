@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<!-- your html body here -->
+<div layout:fragment="content">
+    <div class="container-fluid">
+        <h1 class="h3 mb-2 text-gray-800">고객 관리</h1>
+
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-secondary" style="width: 50%; float: left">고객 조회</h6>
+                <button class="btn btn-dark" type="button" style="float: right; margin-left: 1rem" data-toggle="modal" data-target="#deleteModal">
+                   선택 고객 삭제
+                </button>
+                <button class="btn btn-primary" type="button" style="float: right" data-toggle="modal" data-target="#registerModal">
+                    신규 고객 등록
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" >
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>Customer ID</th>
+                            <th>Name</th>
+                            <th>Birth Day</th>
+                            <th>Devices</th>
+                            <th>Join Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-toggle="modal" data-target="#updateModal">
+                            <td><input type="checkbox"></td>
+                            <td>testuser001</td>
+                            <td>김아무개</td>
+                            <td>1989.03.09</td>
+                            <td>3</td>
+                            <td>07.08.05 17:00:00</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#updateModal">
+                            <td><input type="checkbox"></td>
+                            <td>testuser002</td>
+                            <td>권아무개</td>
+                            <td>1989.12.05</td>
+                            <td>1</td>
+                            <td>19.08.24 11:00:00</td>
+                        </tr>
+                        <tr data-toggle="modal" data-target="#updateModal">
+                            <td><input type="checkbox"></td>
+                            <td>testuser003</td>
+                            <td>최아무개</td>
+                            <td>1990.02.10</td>
+                            <td>2</td>
+                            <td>15.04.19 14:00:00</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:fragment="modal(id)" class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">고객 등록</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group" style="margin-bottom: 7px">
+                        <label for="customerName" style="margin-right: 5px; min-width: 6rem;"> 고객 성함 </label>
+                        <input type="text" id="customerName" class="form-control form-control-sm" placeholder="박소담">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 7px">
+                        <label for="birthday" style="margin-right: 5px; min-width: 6rem;"> 생년월일 </label>
+                        <input type="text" id="birthday" class="form-control form-control-sm" placeholder="1991.09.08">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 7px">
+                        <label for="customerId" style="margin-right: 5px; min-width: 6rem;"> 아이디 </label>
+                        <input type="text" id="customerId" class="form-control form-control-sm" placeholder="중복 체크를 눌러주세요">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="button" style="padding: 0.175rem 0.55rem;">
+                                중복체크
+                            </button>
+                        </div>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 7px">
+                        <label for="customerPwd" style="margin-right: 5px; min-width: 6rem;"> 비밀번호 </label>
+                        <input type="password" id="customerPwd" class="form-control form-control-sm">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 7px">
+                        <label for="checkPwd" style="margin-right: 5px; min-width: 6rem;"> 비밀번호 확인 </label>
+                        <input type="password" id="checkPwd" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                    <a class="btn btn-primary" onclick="customerRegister()" data-dismiss="modal">등록</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:fragment="modal(id)" class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateModalLabel">고객 상세</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group" style="margin-bottom: 7px">
+                        <label for="customerName" style="margin-right: 5px; min-width: 6rem;"> 고객 성함 </label>
+                        <input type="text" id="uCustomerName" class="form-control form-control-sm" placeholder="최아무개" readonly>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 7px">
+                        <label for="birthday" style="margin-right: 5px; min-width: 6rem;"> 생년월일 </label>
+                        <input type="text" id="uBirthday" class="form-control form-control-sm" placeholder="1990.02.10" readonly>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 7px">
+                        <label for="customerId" style="margin-right: 5px; min-width: 6rem;"> 아이디 </label>
+                        <input type="text" id="uCustomerId" class="form-control form-control-sm" placeholder="testuser003" readonly>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 7px">
+                        <label for="customerPwd" style="margin-right: 5px; min-width: 6rem;"> 비밀번호 </label>
+                        <input type="password" id="uCustomerPwd" class="form-control form-control-sm">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 7px">
+                        <label for="checkPwd" style="margin-right: 5px; min-width: 6rem;"> 비밀번호 확인 </label>
+                        <input type="password" id="uCheckPwd" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                    <a class="btn btn-primary" onclick="customerUpdate()" data-dismiss="modal">수정</a>
+                    <a class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">삭제</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:fragment="modal(id)" class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
+         aria-hidden="true" style="z-index: 1070;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">고객 삭제</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">고객을 삭제하시겠습니까?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
+                    <a class="btn btn-danger" data-dismiss="modal" onclick="customerDelete()">삭제</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <!-- your scripts here -->
+    <script>
+        $(document).ready(function() {
+            var table = $('#dataTable').DataTable();
+
+            $('#dataTable tbody').on('click', 'tr', function () {
+                var data = table.row(this).data();
+                $('#uCustomerName').val(data[2]);
+                $('#uBirthday').val(data[3]);
+                $('#uCustomerId').val(data[1]);
+            });
+        });
+        $(document).on('show.bs.modal', '#deleteModal', function (e) {
+            setTimeout(function(){
+                $('.modal-backdrop').css('z-index', 1060);
+                $('.modal-backdrop').css('opacity', 0.25);
+            }, 0);
+        });
+        $(document).on('hide.bs.modal', '#deleteModal', function (e) {
+            setTimeout(function(){
+                $('.modal-backdrop').css('z-index', 1040);
+                $('.modal-backdrop').css('opacity', 0.5);
+            }, 0);
+        });
+
+        function customerRegister() {
+            // Get your code
+        }
+        function customerUpdate() {
+            // Get your code
+        }
+        function customerDelete() {
+            // Get your code
+            $("#updateModal").modal("hide");
+        }
+    </script>
+</th:block>
+</body>
+</html>
