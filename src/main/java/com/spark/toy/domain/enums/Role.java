@@ -1,7 +1,7 @@
 package com.spark.toy.domain.enums;
 
 public enum Role {
-    SYSADMIN,
-    ADMIN,
-    USER
+    ROLE_SYSADMIN,
+    ROLE_ADMIN,
+    ROLE_USER
 }

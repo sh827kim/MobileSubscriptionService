@@ -24,9 +24,9 @@ public class CustomerService {
     }
 
     public CustomerDto getCustomerByAccount(String account) {
-        Customer customer = customerRepository.findByAccount(account).orElseThrow(RuntimeException::new);
+        Customer customer = customerRepository.findByAccount(account).orElse(null);
 
-        return CustomerDto.toDto(customer);
+        return customer!=null ? CustomerDto.toDto(customer): null;
     }
 
     public CustomerDto createCustomer(CustomerDto customerDto) {
@@ -35,6 +35,8 @@ public class CustomerService {
 
         return CustomerDto.toDto(customer);
     }
+
+
 
     public CustomerDto updateCustomer(CustomerDto customerDto) {
         Long customerId = customerRepository.findByAccount(customerDto.getAccount()).orElseThrow(RuntimeException::new).getId();
@@ -46,9 +48,9 @@ public class CustomerService {
     }
 
     public void deleteCustomerByAccount(String account) {
-        Customer customer = customerRepository.findByAccount(account).orElseThrow(RuntimeException::new);
-        customerRepository.delete(customer);
+        customerRepository.deleteByAccount(account);
     }
+
 
     private List<CustomerDto> entityListToDtoList(List<Customer> customers) {
         return customers.stream().map(CustomerDto::toDto).collect(Collectors.toList());

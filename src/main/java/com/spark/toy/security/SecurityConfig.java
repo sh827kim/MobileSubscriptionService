@@ -1,6 +1,9 @@
 package com.spark.toy.security;
 
+import com.spark.toy.service.EmployeeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,26 +12,20 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
+@Order(2)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final EmployeeService employeeService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser(User
-                        .builder()
-                        .username("user1@mail.com")
-                        .password(passwordEncoder().encode("1111"))
-                        .roles("USER"))
-                .withUser(User.builder()
-                        .username("admin@mail.com")
-                        .password(passwordEncoder().encode("3333"))
-                        .roles("ADMIN"));
+        auth.userDetailsService(employeeService);
     }
 
     @Bean

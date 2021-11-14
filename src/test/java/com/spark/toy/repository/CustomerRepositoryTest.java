@@ -1,10 +1,7 @@
 package com.spark.toy.repository;
 
 import com.spark.toy.domain.Customer;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -38,7 +35,8 @@ class CustomerRepositoryTest {
     @Test
     @Order(2)
     void readTest() {
-
+        Customer customer = customerRepository.findByAccount("wangnoon123").orElseThrow(RuntimeException::new);
+        Assertions.assertEquals(TEST_USER_NAME, customer.getName());
     }
 
     @Test
@@ -53,7 +51,10 @@ class CustomerRepositoryTest {
     @Test
     @Order(4)
     void deleteTest() {
+        Customer customer = customerRepository.findByAccount("wangnoon123").orElseThrow(RuntimeException::new);
+        customerRepository.delete(customer);
 
+        Assertions.assertTrue(customerRepository.findByAccount("wangnoon123").isEmpty());
     }
 
     @Test

@@ -12,5 +12,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long>, Revis
 
     Optional<Customer> findByAccount(String account);
 
+    void deleteByAccount(String account);
+
 
 }
