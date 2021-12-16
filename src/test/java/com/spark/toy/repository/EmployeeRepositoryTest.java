@@ -22,7 +22,7 @@ class EmployeeRepositoryTest {
 
     private static final Logger log = LoggerFactory.getLogger(EmployeeRepositoryTest.class);
 
-    private static String TEST_ACCOUNT = "spark@gmail.com";
+    private static String TEST_ACCOUNT = "admin@mail.com";
     private static Role TEST_ROLE = Role.ROLE_ADMIN;
 
     @Autowired
@@ -31,23 +31,27 @@ class EmployeeRepositoryTest {
     @Test
     @Order(1)
     void createTest() {
-        Set<EmployeeAuthority> authorities = new HashSet<>();
-        EmployeeAuthority authority = new EmployeeAuthority();
-        authority.setAuthority(TEST_ROLE.name());
-        authorities.add(authority);
+
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         Employee employee = new Employee();
         employee.setAccount(TEST_ACCOUNT);
-        employee.setEmail("spark@gmail.com");
-        employee.setName("Spark Kim");
-        employee.setAuthorities(authorities);
-        employee.setPhoneNumber("010-2345-6789");
+        employee.setEmail("admin@mail.com");
+        employee.setName("Administrator");
+    //    employee.setAuthorities(authorities);
+        employee.setPhoneNumber("010-2345-6781");
         employee.setPassword(encoder.encode("!new1234"));
         log.info("before create : {}", employee);
 
         Employee employee1 = employeeRepository.save(employee);
+        Set<EmployeeAuthority> authorities = new HashSet<>();
+        EmployeeAuthority authority = new EmployeeAuthority();
+        authority.setAuthority(TEST_ROLE.name());
+        authority.setEmployeeId(employee1.getId());
+        authorities.add(authority);
+        employee1.setAuthorities(authorities);
 
+        employeeRepository.save(employee1);
 
         log.info("after create : {}", employee1);
 

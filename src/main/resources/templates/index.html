@@ -116,26 +116,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>WE000001</td>
-                            <td>Wearable</td>
-                            <td>010-12**-****</td>
-                            <td>N</td>
-                            <td>21.09.25 13:11:02</td>
-                        </tr>
-                        <tr>
-                            <td>TA000001</td>
-                            <td>Tablet</td>
-                            <td>010-12**-****</td>
-                            <td>N</td>
-                            <td>21.09.25 13:11:02</td>
-                        </tr>
-                        <tr>
-                            <td>MB000001</td>
-                            <td>Mobile</td>
-                            <td>010-12**-****</td>
-                            <td>N</td>
-                            <td>21.09.25 13:11:02</td>
+                        <tr data-toggle="modal" th:each="list : ${subscriptions}">
+                            <td th:text="${list.getId()}"></td>
+                            <td th:text="${list.getDeviceType().name()}"></td>
+                            <td th:text="${list.getPhoneNumber()}"></td>
+                            <td th:text="${list.getSubscriptionRequestDto().getIsProceeded()}"></td>
+                            <td th:text="${list.getSubscriptionRequestDto().getRequestedAt()}"></td>
                         </tr>
                         </tbody>
                     </table>

@@ -1,5 +1,6 @@
 package com.spark.toy.controller;
 
+import com.spark.toy.dto.SubscriptionDto;
 import com.spark.toy.dto.SubscriptionRequestDto;
 import com.spark.toy.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +32,18 @@ public class SubscriptionController {
     }
 
     @PostMapping
-    public ResponseEntity<SubscriptionRequestDto> createSubscriptionRequest(@RequestBody SubscriptionRequestDto subscriptionRequestDto) {
-        SubscriptionRequestDto subscriptionRequestDtoResponse = subscriptionService.createSubscriptionRequest(subscriptionRequestDto);
+    public ResponseEntity<SubscriptionDto> createSubscription(@RequestBody SubscriptionDto subscriptionDto) {
+        SubscriptionDto subscriptionDtoResponse = subscriptionService.createSubscription(subscriptionDto);
 
-        return ResponseEntity.ok(subscriptionRequestDtoResponse);
+        return ResponseEntity.ok(subscriptionDtoResponse);
     }
+
+//    @PostMapping
+//    public ResponseEntity<SubscriptionRequestDto> createSubscriptionRequest(@RequestBody SubscriptionRequestDto subscriptionRequestDto) {
+//        SubscriptionRequestDto subscriptionRequestDtoResponse = subscriptionService.createSubscriptionRequest(subscriptionRequestDto);
+//
+//        return ResponseEntity.ok(subscriptionRequestDtoResponse);
+//    }
 
     @PutMapping
     public ResponseEntity<SubscriptionRequestDto> updateSubscriptionRequest(@RequestBody SubscriptionRequestDto subscriptionRequestDto) {

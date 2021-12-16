@@ -14,6 +14,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.*;
+
+import javax.sql.DataSource;
+
 
 @EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -22,6 +26,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final EmployeeService employeeService;
+    private final DataSource dataSource;
+
+    RememberMeAuthenticationFilter filter;
+    TokenBasedRememberMeServices tokenBasedRememberMeServices;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -41,6 +49,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return roleHierarchy;
     }
 
+    @Bean
+    PersistentTokenRepository tokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        try{
+            tokenRepository.removeUserTokens("1");
+        } catch (Exception e) {
+            tokenRepository.setCreateTableOnStartup(true);
+        }
+
+        return tokenRepository;
+    }
+
+    @Bean
+    PersistentTokenBasedRememberMeServices rememberMeServices() {
+        PersistentTokenBasedRememberMeServices services = new PersistentTokenBasedRememberMeServices(
+                "testkey",
+                employeeService,
+                tokenRepository()
+        );
+
+        return services;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -56,7 +88,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .usernameParameter("email")
                     //    .passwordParameter("password")
                 )
+                .exceptionHandling(error ->
+                        error.accessDeniedPage("/access-denied"))
                 .logout(logout -> logout.logoutSuccessUrl("/login"))
+                .rememberMe(rememberMe -> rememberMe
+                        .rememberMeServices(rememberMeServices()))
                 ;
     }
     @Override

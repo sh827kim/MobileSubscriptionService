@@ -1,22 +1,21 @@
 package com.spark.toy.controller;
 
 import com.spark.toy.dto.CustomerDto;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CustomerControllerTest {
 
     String baseUrl = "http://localhost:8081/api/customers";
@@ -33,7 +32,7 @@ class CustomerControllerTest {
 
         ArrayList<Object> body = restTemplate.getForEntity(url, ArrayList.class)
                 .getBody();
-        Assertions.assertEquals(5, body.size());
+        assertEquals(5, body.size());
         body.forEach(System.out::println);
 
         System.out.println(">>>>>> page 1 <<<<<<");
@@ -44,5 +43,67 @@ class CustomerControllerTest {
         body2.forEach(System.out::println);
     }
 
+    @Order(2)
+    @Test
+    void getCustomerByAccountTest() {
+        String account = "gobuk123";
+        String url = baseUrl + "?account=" + account;
+        CustomerDto body = restTemplate.getForEntity(url, CustomerDto.class).getBody();
 
+        System.out.println(body.toString());
+        assertEquals("꼬부기", body.getName());
+    }
+
+
+    @Order(3)
+    @Test
+    void createCustomerTest() {
+        CustomerDto customerDto = getCustomer();
+        CustomerDto result = restTemplate.postForEntity(baseUrl, customerDto, CustomerDto.class).getBody();
+
+        System.out.println(result);
+        assertEquals("갸라도스", result.getName());
+    }
+
+    @Order(4)
+    @Test
+    void updateCustomerTest() {
+        CustomerDto customerDto = getCustomer();
+        String oldPhoneNumber= customerDto.getPhoneNumber();
+        customerDto.setPhoneNumber("010-7989-4982");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<CustomerDto> httpEntity = new HttpEntity<>(customerDto, headers);
+
+
+        CustomerDto result = restTemplate.exchange(baseUrl, HttpMethod.PUT, httpEntity, CustomerDto.class).getBody();
+
+        System.out.println(result);
+        assertNotEquals(oldPhoneNumber, result.getPhoneNumber());
+    }
+
+    @Order(5)
+    @Test
+    void deleteCustomerByAccountTest() {
+        String account = "wdragon001";
+        String url = baseUrl + "?account=" + account;
+
+        restTemplate.delete(url);
+
+        CustomerDto body = restTemplate.getForEntity(url, CustomerDto.class).getBody();
+
+        assertNull(body);
+    }
+
+    CustomerDto getCustomer() {
+        CustomerDto customerDto = new CustomerDto();
+        customerDto.setBirth("1992-06-30");
+        customerDto.setPhoneNumber("010-9873-4325");
+        customerDto.setAccount("wdragon001");
+        customerDto.setName("갸라도스");
+        customerDto.setPassword("!new12345");
+
+        return customerDto;
+    }
 }

@@ -26,8 +26,6 @@ public class Subscription extends BaseEntity {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    private String usimNumber;
-
     private String phoneNumber;
 
     @Enumerated(value = EnumType.STRING)

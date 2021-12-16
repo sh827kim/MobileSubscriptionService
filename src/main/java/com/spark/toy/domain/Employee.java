@@ -24,7 +24,7 @@ public class Employee extends UserBaseEntity implements UserDetails {
     private String email;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employee_id", foreignKey = @ForeignKey(name="employee_id"))
     @NotAudited
     @ToString.Exclude
     private Set<EmployeeAuthority> authorities;

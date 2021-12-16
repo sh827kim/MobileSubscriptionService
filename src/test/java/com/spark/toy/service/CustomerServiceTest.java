@@ -52,7 +52,7 @@ class CustomerServiceTest {
         CustomerDto customerDto = new CustomerDto();
         customerDto.setName("피카츄");
         customerDto.setPassword("12345");
-        customerDto.setBirth(LocalDate.of(2012, 7, 21));
+        customerDto.setBirth("2012-07-21");
         customerDto.setAccount("voltage112");
         customerDto.setPhoneNumber("010-1111-9999");
 

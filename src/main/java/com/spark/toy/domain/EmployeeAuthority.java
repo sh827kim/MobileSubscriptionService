@@ -11,11 +11,13 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false, exclude = {"employee"})
+@IdClass(EmployeeAuthority.class)
 public class EmployeeAuthority implements GrantedAuthority {
 
-    @ManyToOne
     @ToString.Exclude
-    private Employee employee;
+    @Id
+    @Column(name = "employee_id")
+    private Long employeeId;
 
     @Id
     private String authority;

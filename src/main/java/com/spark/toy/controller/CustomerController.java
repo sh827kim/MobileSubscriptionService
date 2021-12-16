@@ -14,7 +14,7 @@ import java.util.List;
 public class CustomerController {
     private final CustomerService customerService;
 
-    private static final Integer DEFAULT_PAGE_SIZE =10;
+    private static final Integer DEFAULT_PAGE_SIZE =100;
 
     @GetMapping("/all")
     public ResponseEntity<List<CustomerDto>> getCustomers(@RequestParam int pageNo, @RequestParam(required = false) Integer pageSize) {

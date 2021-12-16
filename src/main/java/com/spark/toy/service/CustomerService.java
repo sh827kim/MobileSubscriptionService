@@ -4,6 +4,7 @@ import com.spark.toy.domain.Customer;
 import com.spark.toy.dto.CustomerDto;
 import com.spark.toy.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,15 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class CustomerService {
     private final CustomerRepository customerRepository;
+
+    public List<CustomerDto> getCustomers() {
+        List<Customer> customers = customerRepository.findAll();
+
+        return entityListToDtoList(customers);
+    }
 
     public List<CustomerDto> getCustomersWithPageNumber(int pageNo, int pageSize) {
         Page<Customer> pagedCustomers = customerRepository.findAll(PageRequest.of(pageNo, pageSize));
@@ -48,6 +56,7 @@ public class CustomerService {
     }
 
     public void deleteCustomerByAccount(String account) {
+        log.info("account : {}", account);
         customerRepository.deleteByAccount(account);
     }
 
