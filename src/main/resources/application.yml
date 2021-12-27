@@ -17,3 +17,6 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
+  batch:
+    job:
+      enabled: false

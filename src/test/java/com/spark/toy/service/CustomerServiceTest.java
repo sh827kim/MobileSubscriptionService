@@ -39,6 +39,7 @@ class CustomerServiceTest {
         Assertions.assertNotEquals(size, customerDtos2.size());
     }
 
+
     @Test
     @Order(2)
     void getCustomerByAccountTest() {

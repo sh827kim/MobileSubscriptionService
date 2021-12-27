@@ -18,10 +18,12 @@ public class SubscriptionRequest extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "subscription_id")
     @ToString.Exclude
     private Subscription subscription;
 
+    @Enumerated(value = EnumType.STRING)
     private SubscriptionCode requestSubscriptionCode;
 
     private Boolean isProceeded;

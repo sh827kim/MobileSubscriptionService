@@ -74,24 +74,15 @@ public class SubscriptionService {
         subscriptionRequest.setIsProceeded(false);
         subscriptionRequest.setRequestedAt(LocalDateTime.now());
         subscriptionRequest.setRequestSubscriptionCode(SubscriptionCode.OPENED);
-
-        subscription.setSubscriptionRequest(null);
-
-        subscription = subscriptionRepository.save(subscription);
-
         subscriptionRequest.setSubscription(subscription);
-
         subscriptionRequest = subscriptionRequestRepository.save(subscriptionRequest);
 
-        subscription.setSubscriptionRequest(subscriptionRequest);
 
-        subscription = subscriptionRepository.save(subscription);
-
-        customer.addCustomerSubsciptions(subscription);
+        customer.addCustomerSubsciptions(subscriptionRequest.getSubscription());
 
         customerRepository.save(customer);
-        subscription = subscriptionRepository.findById(subscription.getId()).orElseThrow(RuntimeException::new);
-
+        subscription = subscriptionRepository.findById(subscriptionRequest.getSubscription().getId()).orElseThrow(RuntimeException::new);
+        subscription.setSubscriptionRequest(subscriptionRequest);
         return SubscriptionDto.toDto(subscription);
     }
 

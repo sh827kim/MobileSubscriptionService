@@ -1,12 +1,15 @@
 package com.spark.toy.repository;
 
+import com.spark.toy.domain.Customer;
 import com.spark.toy.domain.Subscription;
+import com.spark.toy.domain.SubscriptionRequest;
 import com.spark.toy.domain.enums.DeviceType;
 import com.spark.toy.domain.enums.SubscriptionCode;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,10 +22,15 @@ class SubscriptionRepositoryTest {
 
     private static final Logger log = LoggerFactory.getLogger(SubscriptionRepositoryTest.class);
     private static String TEST_PHONE_NO = "010-1234-5678";
-    private static String TEST_USIM_NO = "123asd2131";
 
     @Autowired
     private SubscriptionRepository subscriptionRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private SubscriptionRequestRepository subscriptionRequestRepository;
 
     @Test
     @Order(1)
@@ -30,7 +38,6 @@ class SubscriptionRepositoryTest {
         Subscription subscription = new Subscription();
         subscription.setSubscriptionCode(SubscriptionCode.UNOPENED);
         subscription.setPhoneNumber(TEST_PHONE_NO);
-        subscription.setUsimNumber(TEST_USIM_NO);
         subscription.setDeviceType(DeviceType.MOBILE);
 
         log.info("before create : {}", subscription);
@@ -50,7 +57,6 @@ class SubscriptionRepositoryTest {
         log.info("read : {}", subscription);
 
         Assertions.assertNotNull(subscription);
-        Assertions.assertEquals(subscription.getUsimNumber(), TEST_USIM_NO);
     }
     @Test
     @Order(3)
@@ -59,12 +65,10 @@ class SubscriptionRepositoryTest {
 
         log.info("before update : {}", subscription);
 
-        subscription.setUsimNumber("321453asfe");
         Subscription subscription1 = subscriptionRepository.save(subscription);
 
         log.info("after update : {}", subscription1);
 
-        Assertions.assertNotEquals(subscription1.getUsimNumber(), TEST_USIM_NO);
     }
     @Test
     @Order(4)
@@ -77,7 +81,28 @@ class SubscriptionRepositoryTest {
 
     @Test
     @Order(5)
-    void relationTest() {
+    void cascadeTest() {
+        Customer customer = customerRepository.findByAccount("gobuk123").orElseThrow(RuntimeException::new);
 
+        Subscription subscription = new Subscription();
+        subscription.setSubscriptionCode(SubscriptionCode.UNOPENED);
+        subscription.setCustomer(customer);
+        subscription.setDeviceType(DeviceType.MOBILE);
+        subscription.setPhoneNumber("010-3333-4444");
+        SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
+        subscriptionRequest.setIsProceeded(false);
+        subscriptionRequest.setRequestedAt(LocalDateTime.now());
+        subscriptionRequest.setRequestSubscriptionCode(SubscriptionCode.OPENED);
+        subscriptionRequest.setSubscription(subscription);
+
+      //  subscription.setSubscriptionRequest(subscriptionRequest);
+        subscriptionRequest = subscriptionRequestRepository.save(subscriptionRequest);
+
+        System.out.println(subscriptionRequest);
+
+       // subscriptionRequest = subscriptionRequestRepository.findBySubscription(subscription).orElseThrow(RuntimeException::new);
+       // Subscription subscription1 = subscriptionRepository.findByPhoneNumber("010-2222-3333").orElseThrow(RuntimeException::new);
+
+      //  System.out.println(subscription1);
     }
 }

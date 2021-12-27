@@ -37,8 +37,6 @@ class SubscriptionServiceTest {
                 .subscriptionCode(SubscriptionCode.UNOPENED)
                 .deviceType(DeviceType.MOBILE)
                 .phoneNumber("010-1234-4321")
-               // .customerDto(CustomerDto.toDto(customer))
-                .usimNumber("21sfew11344")
                 .subscriptionRequestDto(null)
                 .build();
 
@@ -46,7 +44,6 @@ class SubscriptionServiceTest {
 
         System.out.println("RESULT ======> " + result);
 
-        assertEquals("21sfew11344", result.getUsimNumber());
     }
 
     @Test
