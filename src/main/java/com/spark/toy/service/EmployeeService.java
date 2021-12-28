@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +55,7 @@ public class EmployeeService implements UserDetailsService {
     public EmployeeDto updateEmployee(EmployeeDto employeeDto) {
         Employee found = employeeRepository.findByAccount(employeeDto.getAccount()).orElseThrow(RuntimeException::new);
         Employee employee = EmployeeDto.toEntity(employeeDto);
-        if(employeeDto.getPassword()==null || employeeDto.equals("")) {
+        if(employeeDto.getPassword()==null || employeeDto.getPassword().equals("")) {
             employee.setPassword(found.getPassword());
         }
         employee.setId(found.getId());
@@ -87,7 +86,7 @@ public class EmployeeService implements UserDetailsService {
     }
 
     private List<EmployeeDto> entityListToDtoList(List<Employee> employees) {
-        return employees.stream().map(EmployeeDto::toDto).collect(Collectors.toList());
+        return employees.stream().map(EmployeeDto::toDto).toList();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.spark.toy.controller;
 
 import com.spark.toy.dto.SubscriptionDto;
-import com.spark.toy.dto.SubscriptionRequestDto;
 import com.spark.toy.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

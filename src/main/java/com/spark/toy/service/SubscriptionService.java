@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +43,7 @@ public class SubscriptionService {
         }
         List<SubscriptionRequest> subscriptionRequests = subscriptionRequestRepository.findByIsProceeded(isProceeded);
 
-        List<Subscription> subscriptions = subscriptionRequests.stream().map(dto -> dto.getSubscription()).collect(Collectors.toList());
+        List<Subscription> subscriptions = subscriptionRequests.stream().map(SubscriptionRequest::getSubscription).toList();
 
         return entitySubscriptionToDtos(subscriptions);
     }
@@ -101,9 +100,9 @@ public class SubscriptionService {
         return SubscriptionRequestDto.toDto(subscriptionRequestRepository.save(subscriptionRequest));
     }
     private List<SubscriptionDto> entitySubscriptionToDtos(List<Subscription> subscriptions) {
-        return subscriptions.stream().map(SubscriptionDto::toDto).collect(Collectors.toList());
+        return subscriptions.stream().map(SubscriptionDto::toDto).toList();
     }
     private List<SubscriptionRequestDto> entitySubscriptionRequestsToDtos(List<SubscriptionRequest> subscriptionRequests) {
-        return subscriptionRequests.stream().map(SubscriptionRequestDto::toDto).collect(Collectors.toList());
+        return subscriptionRequests.stream().map(SubscriptionRequestDto::toDto).toList();
     }
 }

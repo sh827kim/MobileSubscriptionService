@@ -104,23 +104,23 @@
                 </div>
                 <div class="modal-body">
                     <div class="input-group" style="margin-bottom: 7px">
-                        <label for="customerName" style="margin-right: 5px; min-width: 6rem;"> 고객 성함 </label>
+                        <label for="uCustomerName" style="margin-right: 5px; min-width: 6rem;"> 고객 성함 </label>
                         <input type="text" id="uCustomerName" class="form-control form-control-sm" readonly>
                     </div>
                     <div class="input-group" style="margin-bottom: 7px">
-                        <label for="birthday" style="margin-right: 5px; min-width: 6rem;"> 생년월일 </label>
+                        <label for="uBirthday" style="margin-right: 5px; min-width: 6rem;"> 생년월일 </label>
                         <input type="text" id="uBirthday" class="form-control form-control-sm" readonly>
                     </div>
                     <div class="input-group" style="margin-bottom: 7px">
-                        <label for="customerId" style="margin-right: 5px; min-width: 6rem;"> 아이디 </label>
+                        <label for="uCustomerId" style="margin-right: 5px; min-width: 6rem;"> 아이디 </label>
                         <input type="text" id="uCustomerId" class="form-control form-control-sm" readonly>
                     </div>
                     <div class="input-group" style="margin-bottom: 7px">
-                        <label for="phoneNumber" style="margin-right: 5px; min-width: 6rem;"> 연락처 </label>
+                        <label for="uPhoneNumber" style="margin-right: 5px; min-width: 6rem;"> 연락처 </label>
                         <input type="text" id="uPhoneNumber" class="form-control form-control-sm" readonly>
                     </div>
                     <div class="input-group" style="margin-bottom: 7px">
-                        <label for="customerPwd" style="margin-right: 5px; min-width: 6rem;"> 비밀번호 </label>
+                        <label for="uCustomerPwd" style="margin-right: 5px; min-width: 6rem;"> 비밀번호 </label>
                         <input type="password" id="uCustomerPwd" class="form-control form-control-sm">
                     </div>
                 </div>
@@ -181,7 +181,7 @@
         });
 
         function customerRegister() {
-            var customerDto = {
+            let customerDto = {
                 name: $('#customerName').val(),
                 birth: $('#birthday').val(),
                 account: $('#customerId').val(),

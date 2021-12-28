@@ -28,8 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final EmployeeService employeeService;
     private final DataSource dataSource;
 
-    RememberMeAuthenticationFilter filter;
-    TokenBasedRememberMeServices tokenBasedRememberMeServices;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -64,13 +62,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     PersistentTokenBasedRememberMeServices rememberMeServices() {
-        PersistentTokenBasedRememberMeServices services = new PersistentTokenBasedRememberMeServices(
+        return new PersistentTokenBasedRememberMeServices(
                 "testkey",
                 employeeService,
                 tokenRepository()
         );
-
-        return services;
     }
 
     @Override

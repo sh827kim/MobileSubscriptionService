@@ -1,6 +1,5 @@
 package com.spark.toy.domain.base;
 
-import com.spark.toy.domain.base.BaseEntity;
 import lombok.Data;
 import org.hibernate.envers.Audited;
 

@@ -5,13 +5,13 @@ import com.spark.toy.domain.EmployeeAuthority;
 import com.spark.toy.dto.base.UserBaseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Email;
-import java.util.HashSet;
-import java.util.Set;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

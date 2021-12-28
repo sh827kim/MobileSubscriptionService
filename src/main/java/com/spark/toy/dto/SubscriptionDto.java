@@ -6,16 +6,14 @@ import com.spark.toy.domain.Subscription;
 import com.spark.toy.domain.enums.DeviceType;
 import com.spark.toy.domain.enums.SubscriptionCode;
 import com.spark.toy.dto.base.BaseDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -62,6 +62,6 @@ public class CustomerService {
 
 
     private List<CustomerDto> entityListToDtoList(List<Customer> customers) {
-        return customers.stream().map(CustomerDto::toDto).collect(Collectors.toList());
+        return customers.stream().map(CustomerDto::toDto).toList();
     }
 }
