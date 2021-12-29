@@ -33,7 +33,6 @@ public class Employee extends UserBaseEntity implements UserDetails {
     public String getUsername() {
         return getAccount();
     }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;

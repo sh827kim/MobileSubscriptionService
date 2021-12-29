@@ -16,6 +16,7 @@ import java.time.LocalDate;
 @Entity
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Builder
 public class SubscriptionStatistics extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

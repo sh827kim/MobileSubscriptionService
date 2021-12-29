@@ -10,7 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = false, exclude = {"employee"})
+@EqualsAndHashCode(callSuper = false)
 @IdClass(EmployeeAuthority.class)
 public class EmployeeAuthority implements GrantedAuthority {
 
