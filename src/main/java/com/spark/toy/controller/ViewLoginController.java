@@ -21,4 +21,9 @@ public class ViewLoginController {
         model.addAttribute("loginError", true);
         return "login";
     }
+
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        return "accessDenied";
+    }
 }

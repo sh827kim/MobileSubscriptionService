@@ -28,10 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final EmployeeService employeeService;
     private final DataSource dataSource;
 
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(employeeService);
+        auth.userDetailsService(employeeService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -82,7 +81,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .defaultSuccessUrl("/main", false)
                         .failureUrl("/login")
                         .usernameParameter("email")
-                    //    .passwordParameter("password")
                 )
                 .exceptionHandling(error ->
                         error.accessDeniedPage("/access-denied"))
@@ -94,6 +92,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/bootstrap/**", "/css/**","/js/**", "/img/**", "/bootstrap/vendor/**", "/bootstrap/scss/**");
-    //    web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 }

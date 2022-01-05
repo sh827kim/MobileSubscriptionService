@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -23,12 +24,12 @@ public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final ApplicationContext ctx;
 
-    @Bean
+
     Job subscriptionJob() {
         return (Job) ctx.getBean("subscriptionJob");
     }
 
-    @Bean
+
     Job subscriptionStatisticsJob() {
         return (Job) ctx.getBean("subscriptionStatisticsJob");
     }
@@ -51,7 +52,7 @@ public class BatchScheduler {
         }
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "*/10 * * * * *")
     public void executeSubscriptionStatisticsJob() {
         log.info("executeSubscriptionStatisticsJob() called");
 
@@ -59,6 +60,7 @@ public class BatchScheduler {
             JobParameters jobParameters =
                     new JobParametersBuilder()
                             .addString("date", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                            .addString("executedAt", LocalDateTime.now().toString())
                             .toJobParameters();
             jobLauncher.run(subscriptionStatisticsJob(), jobParameters);
         } catch (Exception e) {

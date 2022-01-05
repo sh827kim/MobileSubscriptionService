@@ -16,10 +16,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.JdbcBatchItemWriter;
-import org.springframework.batch.item.database.JdbcPagingItemReader;
-import org.springframework.batch.item.database.JpaItemWriter;
-import org.springframework.batch.item.database.JpaPagingItemReader;
+import org.springframework.batch.item.database.*;
 import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
@@ -48,7 +45,7 @@ public class SubscriptionBatchConfiguration {
 
 
     @Bean
-    public Job subscriptionStatisticJob() throws Exception {
+    public Job subscriptionStatisticsJob() throws Exception {
         return jobBuilderFactory.get("subscriptionStatisticsJob")
                 .incrementer(new RunIdIncrementer())
                 .start(statisticsStep(null))
@@ -76,37 +73,35 @@ public class SubscriptionBatchConfiguration {
     @Bean
     @JobScope
     public Step statisticsStep(@Value("#{jobParameters[date]}") String date) throws Exception {
-        return stepBuilderFactory.get("subscrtipionStatisticsStep")
+        return stepBuilderFactory.get("subscriptionStatisticsStep")
                 .<SubscriptionStatistics, SubscriptionStatistics> chunk(CHUNK_SIZE)
-                .reader(subscriptionStatisticsJpaPagingItemReader(date))
+                .reader(subscriptionStatisticsJdbcPagingItemReader(date))
                 .writer(subscriptionStatisticsItemWriter())
                 .build();
     }
 
-    private JdbcPagingItemReader<SubscriptionStatistics> subscriptionStatisticsJpaPagingItemReader(String date) throws Exception {
-
-        var time = LocalDateTime.parse(date + " 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        Map<String,Object> params = Map.of("date", time);
-
+    private JdbcPagingItemReader<SubscriptionStatistics> subscriptionStatisticsJdbcPagingItemReader(String date) throws Exception {
+        Map<String,Object> params = Map.of("date", date + " 00:00:00");
 
         JdbcPagingItemReader<SubscriptionStatistics> itemReader = new JdbcPagingItemReaderBuilder<SubscriptionStatistics>()
                 .dataSource(this.dataSource)
                 .rowMapper((resultSet, i) -> SubscriptionStatistics.builder()
                         .date(LocalDate.parse(date , DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                        .totalCount(resultSet.findColumn("totalCount"))
-                        .notProceeded(resultSet.findColumn("notProceeded"))
-                        .succeeded(resultSet.findColumn("succeeded"))
-                        .failed(resultSet.findColumn("failed"))
+                        .totalCount(resultSet.getInt(1))
+                        .notProceeded(resultSet.getInt(2))
+                        .succeeded(resultSet.getInt(3))
+                        .failed(resultSet.getInt(4))
                         .build())
                 .pageSize(10)
                 .name("subscriptionStatisticsItemReader")
-                .selectClause("count (*) as totalCount, " +
+                .selectClause("count(1) as totalCount, " +
                         "count(case when is_proceeded=false then 1 end) as notProceeded, " +
                         "count(case when is_proceeded=true and subscription_id is not null then 1 end) as succeeded, " +
                         "count(case when is_proceeded=true and subscription_id is null then 1 end) as failed")
                 .fromClause("subscription_request")
                 .whereClause("created_at >= :date")
                 .parameterValues(params)
+                .sortKeys(Map.of("totalCount", Order.ASCENDING))
                 .build();
         itemReader.afterPropertiesSet();
 
@@ -149,13 +144,10 @@ public class SubscriptionBatchConfiguration {
         };
     }
 
-    private ItemWriter<? super SubscriptionStatistics> subscriptionStatisticsItemWriter() throws Exception {
-        JpaItemWriter<SubscriptionStatistics> itemWriter = new JpaItemWriterBuilder<SubscriptionStatistics>()
+    private ItemWriter<? super SubscriptionStatistics> subscriptionStatisticsItemWriter() {
+        return new JpaItemWriterBuilder<SubscriptionStatistics>()
                 .entityManagerFactory(entityManagerFactory)
                 .build();
-        itemWriter.afterPropertiesSet();
-
-        return itemWriter;
     }
 
     private ItemWriter<? super SubscriptionRequest> subscriptionRequestItemWriter() {
